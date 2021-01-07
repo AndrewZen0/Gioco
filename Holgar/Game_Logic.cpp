@@ -25,6 +25,10 @@ Giocatore Player;
 char decisione[50];
 int scelta;
 
+void Castle();
+void NPC_Area();
+void Dungeon();
+
 void Chiusura_gioco()//chiusura gioco
 {
 	exit(0);
@@ -78,60 +82,29 @@ int Game_Intro()//intro del gioco
 	}
 }
 
-bool Limite_Movimento(int PlayerX, int PlayerY, char *spostamento)//test se il giocatore uscira' o meno dalla mappa
+bool Limite_Movimento(int PlayerX, int PlayerY, char spostamento)//test se il giocatore uscira' o meno dalla mappa
 {
-	if (strcmp(spostamento, "w") == 0)
+	switch (spostamento)
 	{
-		if ((PlayerX - 1) >= 0)
+		case 'w':
 		{
-			return(true);
-		}
-		else
+			return((PlayerX - 1) >= 0);
+		}break;
+
+		case 's':
 		{
-			return(false);
-		}
-	}
-	else
-	{
-		if (strcmp(spostamento, "s") == 0)
+			return((PlayerX + 1) <= 9);
+		}break;
+
+		case 'a':
 		{
-			if ((PlayerX + 1) <= 9)
-			{
-				return(true);
-			}
-			else
-			{
-				return(false);
-			}
-		}
-		else
+			return((PlayerY - 1) >= 0);
+		}break;
+
+		case 'd':
 		{
-			if (strcmp(spostamento, "a") == 0)
-			{
-				if ((PlayerY - 1) >= 0)
-				{
-					return(true);
-				}
-				else
-				{
-					return(false);
-				}
-			}
-			else
-			{
-				if (strcmp(spostamento, "d") == 0)
-				{
-					if ((PlayerY + 1) <= 9)
-					{
-						return(true);
-					}
-					else
-					{
-						return(false);
-					}
-				}
-			}
-		}
+			return((PlayerY + 1) <= 9);
+		}break;
 	}
 }
 
@@ -142,83 +115,114 @@ void Movimento(int &PlayerX, int &PlayerY, int Map[][50], int &MaxPlayer, int &M
 
 	cin >> spostamento;
 
-	is_valid = Limite_Movimento(PlayerX, PlayerY,&spostamento);
+	is_valid = Limite_Movimento(PlayerX, PlayerY,spostamento);
 
-	if (is_valid == true && spostamento == 'w')
+	
+	if (is_valid == true)
 	{
-		if (Map[PlayerX - 1][PlayerY] == 2)
+		switch (spostamento)
 		{
-			MaxEnemis = MaxEnemis - 1;
-			Map[PlayerX][PlayerY] = 0;
-			Map[PlayerX - 1][PlayerY] = 3;
-			PlayerX = PlayerX - 1;
-			Player.VitaAtt = Player.VitaAtt - 10;
-			Player.Monete = Player.Monete + 10;
-		}
-		if (Map[PlayerX - 1][PlayerY] == 1)
-		{
-			
-		}
-		else
-		{
-			Map[PlayerX][PlayerY] = 0;
-			Map[PlayerX - 1][PlayerY] = 3;
-			PlayerX = PlayerX - 1;
-		}
-	}
-	else
-	{
-		if (is_valid == true && spostamento == 's')
-		{
-			if (Map[PlayerX + 1][PlayerY] == 2)
+			case 'w':
 			{
-				MaxEnemis = MaxEnemis - 1;
-				Map[PlayerX][PlayerY] = 0;
-				Map[PlayerX + 1][PlayerY] = 3;
-				PlayerX = PlayerX + 1;
-				Player.VitaAtt = Player.VitaAtt - 10;
-				Player.Monete = Player.Monete + 10;
-			}
-			if (Map[PlayerX + 1][PlayerY] == 1)
-			{
-				
-			}
-			else
-			{
-				Map[PlayerX][PlayerY] = 0;
-				Map[PlayerX + 1][PlayerY] = 3;
-				PlayerX = PlayerX + 1;
-			}
-		}
-		else
-		{
-			if (is_valid == true && spostamento == 'a')
-			{
-				if (Map[PlayerX][PlayerY - 1] == 2)
+				switch (Map[PlayerX - 1][PlayerY])
 				{
-					MaxEnemis = MaxEnemis - 1;
-					Map[PlayerX][PlayerY] = 0;
-					Map[PlayerX][PlayerY - 1] = 3;
-					PlayerY = PlayerY - 1;
-					Player.VitaAtt = Player.VitaAtt - 10;
-					Player.Monete = Player.Monete + 10;
+					case 0:
+					{
+						Map[PlayerX][PlayerY] = 0;
+						Map[PlayerX - 1][PlayerY] = 3;
+						PlayerX = PlayerX - 1;
+					}break;
+
+					case 1:
+					{
+
+					}break;
+
+					case 2:
+					{
+						MaxEnemis = MaxEnemis - 1;
+						Map[PlayerX][PlayerY] = 0;
+						Map[PlayerX - 1][PlayerY] = 3;
+						PlayerX = PlayerX - 1;
+						Player.VitaAtt = Player.VitaAtt - 10;
+						Player.Monete = Player.Monete + 10;
+					}
 				}
-				if (Map[PlayerX][PlayerY - 1] == 1)
-				{
-					
-				}
-				else
-				{
-					Map[PlayerX][PlayerY] = 0;
-					Map[PlayerX][PlayerY - 1] = 3;
-					PlayerY = PlayerY - 1;
-				}
-			}
-			else
+			}break;
+
+			case 's':
 			{
-				if (is_valid == true && spostamento == 'd')
+				switch (Map[PlayerX + 1][PlayerY])
 				{
-					if (Map[PlayerX - 1][PlayerY + 1] == 2)
+					case 0:
+					{
+						Map[PlayerX][PlayerY] = 0;
+						Map[PlayerX + 1][PlayerY] = 3;
+						PlayerX = PlayerX + 1;
+					}break;
+
+					case 1:
+					{
+
+					}break;
+
+					case 2:
+					{
+						MaxEnemis = MaxEnemis - 1;
+						Map[PlayerX][PlayerY] = 0;
+						Map[PlayerX + 1][PlayerY] = 3;
+						PlayerX = PlayerX + 1;
+						Player.VitaAtt = Player.VitaAtt - 10;
+						Player.Monete = Player.Monete + 10;
+					}
+				}				
+			}break;
+
+			case 'a':
+			{
+				switch (Map[PlayerX][PlayerY - 1])
+				{
+					case 0:
+					{
+						Map[PlayerX][PlayerY] = 0;
+						Map[PlayerX][PlayerY - 1] = 3;
+						PlayerY = PlayerY - 1;
+					}break;
+
+					case 1:
+					{
+
+					}break;
+
+					case 2:
+					{
+						MaxEnemis = MaxEnemis - 1;
+						Map[PlayerX][PlayerY] = 0;
+						Map[PlayerX][PlayerY - 1] = 3;
+						PlayerY = PlayerY - 1;
+						Player.VitaAtt = Player.VitaAtt - 10;
+						Player.Monete = Player.Monete + 10;
+					}
+				}				
+			}break;
+
+			case 'd':
+			{
+				switch (Map[PlayerX][PlayerY + 1])
+				{
+					case 0:
+					{
+						Map[PlayerX][PlayerY] = 0;
+						Map[PlayerX][PlayerY + 1] = 3;
+						PlayerY = PlayerY + 1;
+					}break;
+
+					case 1:
+					{
+
+					}break;
+
+					case 2:
 					{
 						MaxEnemis = MaxEnemis - 1;
 						Map[PlayerX][PlayerY] = 0;
@@ -227,25 +231,14 @@ void Movimento(int &PlayerX, int &PlayerY, int Map[][50], int &MaxPlayer, int &M
 						Player.VitaAtt = Player.VitaAtt - 10;
 						Player.Monete = Player.Monete + 10;
 					}
-					if (Map[PlayerX - 1][PlayerY + 1] == 1)
-					{
-						
-					}
-					else
-					{
-						Map[PlayerX][PlayerY] = 0;
-						Map[PlayerX][PlayerY + 1] = 3;
-						PlayerY = PlayerY + 1;
-					}
-				}
-			}
-		}
+				}				
+			}break;
+		}		
 	}
 	if (Player.VitaAtt <= 0)
 	{
 		MaxPlayer = MaxPlayer - 1;
 	}
-	cout << endl << Player.VitaAtt << "/" << Player.VitaMax << endl;
 }
 
 void Dungeon()//interazioni nel dungeon
@@ -367,8 +360,9 @@ void Dungeon()//interazioni nel dungeon
 			}
 			cout << endl;
 			Movimento(PlayerX, PlayerY, Map, MaxPlayer, MaxEnemies);
-			cout << endl;
-		} while (MaxPlayer > 0 || MaxEnemies > 0);
+			system("cls");
+			cout << endl << Player.VitaAtt << "/" << Player.VitaMax << endl;
+		} while (MaxPlayer > 0 && MaxEnemies > 0);
 		if (MaxPlayer <= 0)
 		{
 			cout << "\nGame Over\n";			
@@ -396,6 +390,27 @@ void Dungeon()//interazioni nel dungeon
 				{
 					Player.VitaAtt = Player.VitaAtt + 50;
 					Player.Inventario[2] = Player.Inventario[2] - 1;
+				}
+			}
+			else
+			{
+				if (strcmp(decisione, "sali1") == 0)
+				{
+					NPC_Area();
+				}
+				else
+				{
+					if (strcmp(decisione, "sali2") == 0)
+					{
+						Castle();
+					}
+					else
+					{
+						if (strcmp(decisione, "stats") == 0)
+						{
+							cout << endl << "Vita:" << Player.VitaAtt << "/" << Player.VitaMax << endl << "Forza:" << Player.Forza << endl << "Destrezza:" << Player.Destrezza << endl << "Intelligenza:" << Player.Intelligenza << endl << "Fortuna:" << Player.Fortuna << endl << "Monete:" << Player.Monete << endl << "Inventario:" << endl << Player.Inventario[0] << endl << Player.Inventario[1] << endl << Player.Inventario[2] << endl;
+						}
+					}
 				}
 			}
 		}
@@ -496,6 +511,20 @@ void NPC_Area()//interazione con npc del secondo piano
 							Player.Inventario[2] = Player.Inventario[2] - 1;
 						}
 					}
+					else
+					{
+						if (strcmp(decisione, "sali1") == 0)
+						{
+							Castle();
+						}
+						else
+						{
+							if (strcmp(decisione, "stats") == 0)
+							{
+								cout << endl << "Vita:" << Player.VitaAtt << "/" << Player.VitaMax << endl << "Forza:" << Player.Forza << endl << "Destrezza:" << Player.Destrezza << endl << "Intelligenza:" << Player.Intelligenza << endl << "Fortuna:" << Player.Fortuna << endl << "Monete:" << Player.Monete << endl << "Inventario:" << endl << Player.Inventario[0] << endl << Player.Inventario[1] << endl << Player.Inventario[2] << endl;
+							}
+						}
+					}
 				}
 			}
 		}
@@ -547,6 +576,13 @@ void Castle()//area di inizio gioco e scelta di dove andare
 							{
 								Player.VitaAtt = Player.VitaAtt + 50;
 								Player.Inventario[2] = Player.Inventario[2] - 1;
+							}
+						}
+						else
+						{
+							if (strcmp(decisione, "stats") == 0)
+							{
+								cout << endl << "Vita:" << Player.VitaAtt << "/" << Player.VitaMax << endl << "Forza:" << Player.Forza << endl << "Destrezza:" << Player.Destrezza << endl << "Intelligenza:" << Player.Intelligenza << endl << "Fortuna:" << Player.Fortuna << endl << "Monete:" << Player.Monete << endl << "Inventario:" << endl << Player.Inventario[0] << endl << Player.Inventario[1] << endl << Player.Inventario[2] << endl;
 							}
 						}
 					}
